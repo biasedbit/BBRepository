@@ -51,7 +51,6 @@ extern NSTimeInterval const kBBCacheDefaultItemDuration;
 
 #pragma mark BBRepository overrides
 
-- (id<BBCacheItem>)itemForKey:(NSString*)key;
 - (BOOL)addItem:(id<BBCacheItem>)item;
 
 

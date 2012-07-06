@@ -90,9 +90,11 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 - (NSUInteger)itemCount;
 
 /* Retrieve an item based on its index key */
-- (id<BBRepositoryItem>)itemForKey:(NSString*)key;
+- (id)itemForKey:(NSString*)key;
 
 - (BOOL)addItem:(id<BBRepositoryItem>)item;
+
+- (void)removeItemWithKey:(NSString*)key;
 
 /* This one MUST be overridden by subclasses */
 - (id<BBRepositoryItem>)createItemFromDictionary:(NSDictionary*)dictionary;

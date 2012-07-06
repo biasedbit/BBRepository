@@ -59,9 +59,9 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 
 #pragma mark BBRepository overrides
 
-- (id<BBCacheItem>)itemForKey:(NSString*)key
+- (id)itemForKey:(NSString*)key
 {
-    id<BBCacheItem> item = (id<BBCacheItem>)[super itemForKey:key];
+    id<BBCacheItem> item = [super itemForKey:key];
     if (item == nil) {
         return nil;
     }

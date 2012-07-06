@@ -176,7 +176,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return [_entries count];
 }
 
-- (id<BBRepositoryItem>)itemForKey:(NSString*)key
+- (id)itemForKey:(NSString*)key
 {
     return [_entries objectForKey:key];
 }
@@ -186,6 +186,11 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     [_entries setObject:item forKey:[item key]];
 
     return YES;
+}
+
+- (void)removeItemWithKey:(NSString*)key
+{
+    [_entries removeObjectForKey:key];
 }
 
 - (id<BBRepositoryItem>)createItemFromDictionary:(NSDictionary*)dictionary
