@@ -89,6 +89,10 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 /* Number of managed entries (in-memory) by this repository */
 - (NSUInteger)itemCount;
 
+- (NSArray*)allItems;
+
+- (BOOL)hasItemWithKey:(NSString*)key;
+
 /* Retrieve an item based on its index key */
 - (id)itemForKey:(NSString*)key;
 

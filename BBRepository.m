@@ -176,6 +176,16 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return [_entries count];
 }
 
+- (NSArray*)allItems
+{
+    return [_entries allValues];
+}
+
+- (BOOL)hasItemWithKey:(NSString*)key
+{
+    return [_entries objectForKey:key] != nil;
+}
+
 - (id)itemForKey:(NSString*)key
 {
     return [_entries objectForKey:key];
