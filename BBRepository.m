@@ -210,8 +210,8 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (NSDictionary*)convertItemToDictionary:(id<BBRepositoryItem>)item
 {
-    if ([item respondsToSelector:@selector(convertToDictionary)]) {
-        return [item convertToDictionary];
+    if ([item respondsToSelector:@selector(convertToRepositoryDictionary)]) {
+        return [item convertToRepositoryDictionary];
     }
 
     return nil;

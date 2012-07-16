@@ -36,7 +36,7 @@
  conversion methods and repeating code in each subclass (harder to maintain if anything changes) you can leave this
  logic to the repository.
  */
-- (id)convertFromDictionary:(NSDictionary*)dictionary;
-- (NSDictionary*)convertToDictionary;
+- (id)initWithRepositoryDictionary:(NSDictionary*)dictionary;
+- (NSDictionary*)convertToRepositoryDictionary;
 
 @end
