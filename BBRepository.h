@@ -78,7 +78,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 #pragma mark Public methods
 
 /* Completely purges all data managed by this repository (deletes file on disk and entries in memory) */
-- (BOOL)reset;
+- (BOOL)destroy;
 
 /* Reload data from disk */
 - (BOOL)reload;

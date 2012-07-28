@@ -65,7 +65,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 #pragma mark Public methods
 
-- (BOOL)reset
+- (BOOL)destroy
 {
     _entries = [NSMutableDictionary dictionary];
     [[NSFileManager defaultManager] removeItemAtPath:_repositoryDirectory error:nil];
