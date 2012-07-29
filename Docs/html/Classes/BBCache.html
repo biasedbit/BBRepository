@@ -27,6 +27,8 @@
 					<select id="jumpTo">
 	<option value="top">Jump To&#133;</option>
 	
+	<option value="overview">Overview</option>
+	
 	
 	
 	
@@ -64,10 +66,20 @@
 		<nav id="tocContainer" class="isShowingTOC">
 			<ul id="toc" role="tree">
 				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
 
 
 
 <li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creation">Creation</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Cache properties">Cache properties</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_BBRepository overrides">BBRepository overrides</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Item expiration">Item expiration</a></span></li>
 	
 </ul></li>
 
@@ -129,6 +141,28 @@
 					
 					
 					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Special purpose implementation of a <a href="../Classes/BBRepository.html"><code>BBRepository</code></a> that handles expiring items.</p>
+
+<p>When items are added to this cache, their expiration date is set to a date in the future. When that expiration date
+elapses, items are considered outdated and may be purged.</p>
+
+<p>Every time that an item is retrieved, this repository automatically &ldquo;touches&rdquo; its <code>expirationDate</code>, setting it farther
+into the future (exactly <a href="#//api/name/itemDuration"><code>itemDuration</code></a> seconds into the future) thus naturally keeping frequently used items from
+becoming outdated &mdash; and eligible for purging.</p>
+
+<h2>Purging items</h2>
+
+<p>Purging expired items is <strong>not</strong> an automatic step. It is up to you to control when the items are purged (by calling
+<a href="#//api/name/purgeStaleItems"><code>purgeStaleItems</code></a>). A good time to do this is when the app is sent to background or at any point in the app&rsquo;s
+lifecycle where the repository is no longer (or will become) unnecessary, such as when exiting an area of the app that
+makes use of it.</p>
+					</div>
+					
+					
+					
 					
 					
 					<div class="section section-tasks">
@@ -136,42 +170,66 @@
 						<h2 class="subtitle subtitle-tasks">Tasks</h2>
 						
 						
-						
-						
+						<a title="Creation" name="task_Creation"></a>
+						<h3 class="subsubtitle task-title">Creation</h3>
 
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/initWithIdentifier:andItemDuration:">&ndash;&nbsp;initWithIdentifier:andItemDuration:</a></code>
-		
+		<span class="tooltip"><p>Creates a new repository with a given identifier and item duration.</p></span>
 	</span>
 	
 	
-</li><li>
+</li>
+						</ul>
+						
+						
+						<a title="Cache properties" name="task_Cache properties"></a>
+						<h3 class="subsubtitle task-title">Cache properties</h3>
+
+						<ul class="task-list">
+							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/itemDuration">&nbsp;&nbsp;itemDuration</a></code>
-		
+		<span class="tooltip"><p>Duration, in seconds, of the items in this cache.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
-</li><li>
+</li>
+						</ul>
+						
+						
+						<a title="BBRepository overrides" name="task_BBRepository overrides"></a>
+						<h3 class="subsubtitle task-title">BBRepository overrides</h3>
+
+						<ul class="task-list">
+							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/addItem:">&ndash;&nbsp;addItem:</a></code>
-		
+		<span class="tooltip"><p>Adds an item to the repository.</p></span>
 	</span>
 	
 	
-</li><li>
+</li>
+						</ul>
+						
+						
+						<a title="Item expiration" name="task_Item expiration"></a>
+						<h3 class="subsubtitle task-title">Item expiration</h3>
+
+						<ul class="task-list">
+							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/purgeStaleItems">&ndash;&nbsp;purgeStaleItems</a></code>
-		
+		<span class="tooltip"><p>Destroy all items in this cache whose <code>expirationDate</code> property is inferior to the moment when this method is called.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/destroyExpiredItem:">&ndash;&nbsp;destroyExpiredItem:</a></code>
-		
+		<span class="tooltip"><p>Perform additional steps to destroy an item detected as stale.</p></span>
 	</span>
 	
 	
@@ -193,6 +251,39 @@
 	<h3 class="subsubtitle method-title">itemDuration</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>Duration, in seconds, of the items in this cache.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (assign, nonatomic, readonly) NSTimeInterval itemDuration</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>When items are added to this repository, their expiration date will be set to the current instant plus <a href="#//api/name/itemDuration"><code>itemDuration</code></a>
+seconds.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">BBCache.h</code><br />
+	</div>				
+	
+	
 </div>
 						
 					</div>
@@ -210,11 +301,116 @@
 	<h3 class="subsubtitle method-title">addItem:</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>Adds an item to the repository.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (BOOL)addItem:(id&lt;BBCacheItem&gt;)<em>item</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>item</em></dt>
+			<dd><p>Item to add to the repository.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p><code>YES</code> if the item was successfully added to the repository, <code>NO</code> otherwise.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If the object doesn&rsquo;t have its <code>expirationDate</code> property set, it will be set to the current instant plus <a href="#//api/name/itemDuration"><code>itemDuration</code></a>
+seconds.</p>
+
+<p>Subclasses should override this method and change its input type to help guarantee type safety.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/BBRepository.html#//api/name/addItem:">[BBRepository addItem:]</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">BBCache.h</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
 	<a name="//api/name/destroyExpiredItem:" title="destroyExpiredItem:"></a>
 	<h3 class="subsubtitle method-title">destroyExpiredItem:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Perform additional steps to destroy an item detected as stale.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)destroyExpiredItem:(id&lt;BBCacheItem&gt;)<em>item</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>item</em></dt>
+			<dd><p>The expired item to destroy.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Subclass this method if you wish to perform additional steps when expiring an item (no need to call <code>super</code> as this
+is a no-op implementation).</p>
+
+<p>As an example, if you were implementing an image cache, this method is where you would delete the file where the image
+was stored.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">BBCache.h</code><br />
+	</div>				
 	
 	
 </div>
@@ -224,11 +420,116 @@
 	<h3 class="subsubtitle method-title">initWithIdentifier:andItemDuration:</h3>
 	
 	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new repository with a given identifier and item duration.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)initWithIdentifier:(NSString *)<em>identifier</em> andItemDuration:(NSTimeInterval)<em>itemDuration</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>identifier</em></dt>
+			<dd><p>The identifier for this cache.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>itemDuration</em></dt>
+			<dd><p>The duration of items added to this cache.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A newly initialized <a href="BBCache.html"><code>BBCache</code></a> instance.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/BBRepository.html#//api/name/identifier">[BBRepository identifier]</a></p></code></li>
+			
+			<li><code><p><a href="#//api/name/itemDuration">@property itemDuration</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">BBCache.h</code><br />
+	</div>				
+	
+	
 </div>
 						
 						<div class="section-method">
 	<a name="//api/name/purgeStaleItems" title="purgeStaleItems"></a>
 	<h3 class="subsubtitle method-title">purgeStaleItems</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Destroy all items in this cache whose <code>expirationDate</code> property is inferior to the moment when this method is called.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSUInteger)purgeStaleItems</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Number of purged items.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Each expired item will be removed from the cache index and <a href="#//api/name/destroyExpiredItem:"><code>destroyExpiredItem:</code></a> will be called, passing the expired
+item as parameter.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/destroyExpiredItem:">&ndash; destroyExpiredItem:</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">BBCache.h</code><br />
+	</div>				
 	
 	
 </div>
@@ -246,7 +547,7 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 BiasedBit. All rights reserved. (Last updated: 2012-07-28)</span><br />
+						<p><span class="copyright">&copy; 2012 BiasedBit. All rights reserved. (Last updated: 2012-07-29)</span><br />
 						
 						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 737)</a>.</span></p>
 						

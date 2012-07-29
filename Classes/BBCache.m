@@ -90,6 +90,11 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
     return [super addItem:item];
 }
 
+- (NSString*)baseStoragePath
+{
+    return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
 
 #pragma mark Public methods
 

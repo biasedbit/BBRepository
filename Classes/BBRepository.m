@@ -48,7 +48,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
         NSString* basePath = [self baseStoragePath];
         NSString* repositoryName = [self repositoryName];
-        NSString* indexFileName = [NSString stringWithFormat:@"%@-%@-Index.plist", _identifier, repositoryName];
+        NSString* indexFileName = [NSString stringWithFormat:@"%@-Index.plist", repositoryName];
 
         _repositoryDirectory = [basePath stringByAppendingPathComponent:repositoryName];
         _repositoryIndex = [_repositoryDirectory stringByAppendingPathComponent:indexFileName];
@@ -63,7 +63,25 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 }
 
 
-#pragma mark Public methods
+#pragma mark Repository properties
+
+- (NSString*)baseStoragePath
+{
+    return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+- (NSString*)repositoryName
+{
+    // Rather than computing the name every time, just do it once...
+    dispatch_once(&_repositoryNameOnceToken, ^{
+        _repositoryName = [NSString stringWithFormat:@"%@-%@", NSStringFromClass([self class]), _identifier];
+    });
+
+    return _repositoryName;
+}
+
+
+#pragma mark Repository lifecycle management
 
 - (BOOL)destroy
 {
@@ -134,6 +152,11 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return YES;
 }
 
+- (void)reloadComplete
+{
+    // to be overridden by subclasses and add custom behavior
+}
+
 - (BOOL)flush
 {
     // Grab a snapshot to avoid the need for synchronization
@@ -171,6 +194,9 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return YES;
 }
 
+
+#pragma mark Querying
+
 - (NSUInteger)itemCount
 {
     return [_entries count];
@@ -191,6 +217,9 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return [_entries objectForKey:key];
 }
 
+
+#pragma mark Modifications
+
 - (BOOL)addItem:(id<BBRepositoryItem>)item
 {
     [_entries setObject:item forKey:[item key]];
@@ -202,6 +231,9 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 {
     [_entries removeObjectForKey:key];
 }
+
+
+#pragma mark Item (de-)serialization
 
 - (id<BBRepositoryItem>)createItemFromDictionary:(NSDictionary*)dictionary
 {
@@ -215,26 +247,6 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     }
 
     return nil;
-}
-
-- (NSString*)repositoryName
-{
-    // Rather than computing the name every time, just do it once...
-    dispatch_once(&_repositoryNameOnceToken, ^{
-        _repositoryName = [NSString stringWithFormat:@"%@-%@", NSStringFromClass([self class]), _identifier];
-    });
-
-    return _repositoryName;
-}
-
-- (NSString*)baseStoragePath
-{
-    return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-}
-
-- (void)reloadComplete
-{
-    // to be overridden by subclasses and add custom behavior
 }
 
 @end
