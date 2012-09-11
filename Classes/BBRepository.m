@@ -113,7 +113,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
         if (_entries == nil) {
             _entries = [NSMutableDictionary dictionary];
         }
-        return NO;
+        return YES;
     }
 
     // Deserialize the contents of the file to an NSDictionary
@@ -128,7 +128,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
         if (_entries == nil) {
             _entries = [NSMutableDictionary dictionary];
         }
-        return NO;
+        return YES;
     }
 
     NSMutableDictionary* entries = [NSMutableDictionary dictionaryWithCapacity:[entriesAsDictionaries count]];
