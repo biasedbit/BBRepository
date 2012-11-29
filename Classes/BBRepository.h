@@ -27,22 +27,20 @@
 
 #ifndef LogTrace
     #if DEBUG
-        #define LogTrace(fmt, ...)  NSLog((@"(TRACE) " fmt), ##__VA_ARGS__);
+        #define LogTrace(fmt, ...)  NSLog((@"TRACE: " fmt), ##__VA_ARGS__);
     #elif
-        #define LogTrace(...)
+        #define LogTrace(fmt, ...)
     #endif
 #endif
 
 #ifndef LogDebug
-    #define LogDebug(fmt, ...)  NSLog((@"(DEBUG) " fmt), ##__VA_ARGS__);
+    #define LogDebug(fmt, ...)  NSLog((@"DEBUG: " fmt), ##__VA_ARGS__);
 #endif
-
 #ifndef LogInfo
-    #define LogInfo(fmt, ...)   NSLog((@"(INFO) " fmt), ##__VA_ARGS__);
+    #define LogInfo(fmt, ...)   NSLog((@" INFO: " fmt), ##__VA_ARGS__);
 #endif
-
 #ifndef LogError
-    #define LogError(fmt, ...)  NSLog((@"(ERROR) " fmt), ##__VA_ARGS__);
+    #define LogError(fmt, ...)  NSLog((@"ERROR: " fmt), ##__VA_ARGS__);
 #endif
 
 
