@@ -96,7 +96,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 }
 
 
-#pragma mark Public methods
+#pragma mark Interface
 
 - (NSUInteger)purgeStaleItems
 {
