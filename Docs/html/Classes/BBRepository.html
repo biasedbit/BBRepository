@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 737)" />
+		<meta name="generator" content="appledoc 2.1 (build 840)" />
 	</head>
 	<body>
 		<header id="top_header">
@@ -229,6 +229,27 @@ will contain <code>NSDictionary</code> representations of the managed objects</p
 <p>All other methods are optional, but you will likely need to add further logic (i.e. override calling <code>super</code>). For an
 example, check out the <a href="../Classes/BBCache.html">BBCache</a> class and other examples provided.</p>
 
+<h2>Indexing other fields</h2>
+
+<p>If you wish to index your records based on other fields, the best way to do it is to override <a href="#//api/name/reloadComplete"><code>reloadComplete</code></a> and
+populate your own <code>NSDictionary</code> there.</p>
+
+<p>For instance, if you were to index a given record based on a combination of <code>name</code> and <code>source</code> fields, you could do:</p>
+
+<pre><code>- (void)reloadComplete
+{
+    // Assumes existence of _otherIndex NSMutableDictionary
+    _otherIndex = [NSMutableDictionary dictionary];
+
+    for (id record in _entries) {
+        NSString* key = [NSString stringWithFormat:@"%@:%@", record.name, record.source];
+        [_otherIndex setObject:record forKey:key];
+    }
+ }
+</code></pre>
+
+<p>Of course that in doing so, you&rsquo;d also have to update this secondary index on record insertion and removal.</p>
+
 <h2>Performance considerations</h2>
 
 <p>This class (and subclasses) are not meant to handle very large data sets. Use it only if you&rsquo;re sure that you will be
@@ -309,7 +330,7 @@ image data to disk and when removing it from the repository, you&rsquo;d delete 
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/identifier">&nbsp;&nbsp;identifier</a></code>
-		<span class="tooltip"><p>The <a href="#//api/name/identifier">identifier</a> for this repository, as provided on creation.</p></span>
+		<span class="tooltip"><p>The identifier for this repository, as provided on creation.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -359,7 +380,7 @@ image data to disk and when removing it from the repository, you&rsquo;d delete 
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/flush">&ndash;&nbsp;flush</a></code>
-		<span class="tooltip"><p>Serialize and <a href="#//api/name/flush">flush</a> all entries in memory to disk.</p></span>
+		<span class="tooltip"><p>Serialize and flush all entries in memory to disk.</p></span>
 	</span>
 	
 	
@@ -464,12 +485,14 @@ serialized version of the object.</p></span>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The <a href="#//api/name/identifier">identifier</a> for this repository, as provided on creation.</p>
+		<p>The identifier for this repository, as provided on creation.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>@property (strong, nonatomic, readonly) NSString *identifier</code></div>
-	
+
+    
 	
 	
 	
@@ -528,9 +551,11 @@ identifiers will have a different storage path and index, thus resulting in two 
 		<p>Adds an item to the repository.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (BOOL)addItem:(id&lt;BBRepositoryItem&gt;)<em>item</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -584,9 +609,11 @@ deemed appropriate in order to persist this item.</p>
 		<p>Returns a snapshot of all the items present in the repository at the time of calling of this method.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (NSArray *)allItems</code></div>
-	
+
+    
 	
 	
 	
@@ -623,9 +650,11 @@ deemed appropriate in order to persist this item.</p>
 		<p>Returns the base storage path.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (NSString *)baseStoragePath</code></div>
-	
+
+    
 	
 	
 	
@@ -671,9 +700,11 @@ This path can also be used to store additional files managed by this repository.
 		<p>Convert an item to its <code>NSDictionary</code> representation, so that it can be stored to a binary property list (plist).</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (NSDictionary *)convertItemToDictionary:(id&lt;BBRepositoryItem&gt;)<em>item</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -735,9 +766,11 @@ the item <strong>not to be serialized</strong>.</p>
 serialized version of the object.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (id&lt;BBRepositoryItem&gt;)createItemFromDictionary:(NSDictionary *)<em>dictionary</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -799,9 +832,11 @@ serialized version of the object.</p>
 		<p>Completely purges all data managed by this repository.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (BOOL)destroy</code></div>
-	
+
+    
 	
 	
 	
@@ -841,12 +876,14 @@ be reinstalled.</p>
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Serialize and <a href="#//api/name/flush">flush</a> all entries in memory to disk.</p>
+		<p>Serialize and flush all entries in memory to disk.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (BOOL)flush</code></div>
-	
+
+    
 	
 	
 	
@@ -883,9 +920,11 @@ be reinstalled.</p>
 		<p>Test whether the repository contains an item with the given key.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (BOOL)hasItemWithKey:(NSString *)<em>key</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -932,15 +971,17 @@ be reinstalled.</p>
 		<p>Creates a new repository, passing &ldquo;Default&rdquo; as the <a href="#//api/name/identifier">identifier</a>.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (id)init</code></div>
-	
+
+    
 	
 	
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A newly initialized <a href="BBRepository.html"><code>BBRepository</code></a> instance.</p>
+		<p>A newly initialized <code>BBRepository</code> instance.</p>
 	</div>
 	
 	
@@ -980,9 +1021,11 @@ be reinstalled.</p>
 		<p>Creates a new repository with a given <a href="#//api/name/identifier">identifier</a>.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (id)initWithIdentifier:(NSString *)<em>identifier</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -998,7 +1041,7 @@ be reinstalled.</p>
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>A newly initialized <a href="BBRepository.html"><code>BBRepository</code></a> instance.</p>
+		<p>A newly initialized <code>BBRepository</code> instance.</p>
 	</div>
 	
 	
@@ -1038,9 +1081,11 @@ be reinstalled.</p>
 		<p>Number of managed entries (in-memory) by this repository.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (NSUInteger)itemCount</code></div>
-	
+
+    
 	
 	
 	
@@ -1077,9 +1122,11 @@ be reinstalled.</p>
 		<p>Retrieve an item based on its index key</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (id)itemForKey:(NSString *)<em>key</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -1126,9 +1173,11 @@ be reinstalled.</p>
 		<p>Reload data from disk</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (BOOL)reload</code></div>
-	
+
+    
 	
 	
 	
@@ -1165,9 +1214,11 @@ be reinstalled.</p>
 		<p>Called after <a href="#//api/name/reload">reload</a> succeeds, right before returning <code>YES</code> on <a href="#//api/name/reload"><code>reload</code></a>.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (void)reloadComplete</code></div>
-	
+
+    
 	
 	
 	
@@ -1205,9 +1256,11 @@ need to perform some post <a href="#//api/name/reload">reload</a> actions.</p>
 		<p>Removes an item from the repository.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (void)removeItemWithKey:(NSString *)<em>key</em></code></div>
-	
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
@@ -1254,9 +1307,11 @@ need to perform some post <a href="#//api/name/reload">reload</a> actions.</p>
 		<p>Name of the repository, used to generate the target repository directory and index filename.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>- (NSString *)repositoryName</code></div>
-	
+
+    
 	
 	
 	
@@ -1316,9 +1371,9 @@ need to perform some post <a href="#//api/name/reload">reload</a> actions.</p>
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 BiasedBit. All rights reserved. (Last updated: 2012-07-29)</span><br />
+						<p><span class="copyright">&copy; 2012 BiasedBit. All rights reserved. (Last updated: 2012-12-15)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 737)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 840)</a>.</span></p>
 						
 					</div>
 				</div>
@@ -1406,6 +1461,14 @@ need to perform some post <a href="#//api/name/reload">reload</a> actions.</p>
 			}
 			
 			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
 		</script>
 	</body>
 </html>

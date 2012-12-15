@@ -34,7 +34,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 @implementation BBRepository
 {
     dispatch_once_t _repositoryNameOnceToken;
-    __strong NSString* _repositoryName;
+    NSString* _repositoryName;
 }
 
 
@@ -110,9 +110,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     NSData* dictionaryData = [NSData dataWithContentsOfFile:_repositoryIndex];
     if (dictionaryData == nil) {
         LogTrace(@"[%@] Could not read index file; creating empty repository.", [self repositoryName]);
-        if (_entries == nil) {
-            _entries = [NSMutableDictionary dictionary];
-        }
+        if (_entries == nil) _entries = [NSMutableDictionary dictionary];
         return YES;
     }
 
@@ -125,9 +123,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
     if (errorDescription != nil) {
         LogError(@"[%@] Data read from index file but de-serialization failed: %@", [self repositoryName], error);
-        if (_entries == nil) {
-            _entries = [NSMutableDictionary dictionary];
-        }
+        if (_entries == nil) _entries = [NSMutableDictionary dictionary];
         return YES;
     }
 
@@ -135,9 +131,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     // Convert each key-value pair (NSString, NSDictionary) into entries
     [entriesAsDictionaries enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSDictionary* dictionary, BOOL* stop) {
         id<BBRepositoryItem> item = [self createItemFromDictionary:dictionary];
-        if (item != nil) {
-            [entries setObject:item forKey:[item key]];
-        }
+        if (item != nil) [entries setObject:item forKey:[item key]];
     }];
 
     // "atomic" change
@@ -166,9 +160,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     NSMutableDictionary* itemsAsDictionaries = [NSMutableDictionary dictionaryWithCapacity:[snapshot count]];
     [snapshot enumerateKeysAndObjectsUsingBlock:^(NSString* key, id<BBRepositoryItem> item, BOOL* stop) {
         NSDictionary* itemAsDictionary = [self convertItemToDictionary:item];
-        if (itemAsDictionary != nil) {
-            [itemsAsDictionaries setObject:itemAsDictionary forKey:key];
-        }
+        if (itemAsDictionary != nil) [itemsAsDictionaries setObject:itemAsDictionary forKey:key];
     }];
 
     // Create NSData from the dictionary created above, by serializing using binary property lists.
@@ -242,11 +234,9 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (NSDictionary*)convertItemToDictionary:(id<BBRepositoryItem>)item
 {
-    if ([item respondsToSelector:@selector(convertToRepositoryDictionary)]) {
-        return [item convertToRepositoryDictionary];
-    }
+    if (![item respondsToSelector:@selector(convertToRepositoryDictionary)]) return nil;
 
-    return nil;
+    return [item convertToRepositoryDictionary];
 }
 
 @end

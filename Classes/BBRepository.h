@@ -90,6 +90,27 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  
  All other methods are optional, but you will likely need to add further logic (i.e. override calling `super`). For an
  example, check out the BBCache class and other examples provided.
+ 
+ 
+ ## Indexing other fields
+ 
+ If you wish to index your records based on other fields, the best way to do it is to override `reloadComplete` and
+ populate your own `NSDictionary` there.
+ 
+ For instance, if you were to index a given record based on a combination of `name` and `source` fields, you could do:
+ 
+    - (void)reloadComplete
+    {
+        // Assumes existence of _otherIndex NSMutableDictionary
+        _otherIndex = [NSMutableDictionary dictionary];
+
+        for (id record in _entries) {
+            NSString* key = [NSString stringWithFormat:@"%@:%@", record.name, record.source];
+            [_otherIndex setObject:record forKey:key];
+        }
+     }
+ 
+ Of course that in doing so, you'd also have to update this secondary index on record insertion and removal.
 
 
  ## Performance considerations
@@ -136,10 +157,10 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 @interface BBRepository : NSObject
 {
 @protected
-    __strong NSString* _identifier;
-    __strong NSString* _repositoryDirectory;
-    __strong NSString* _repositoryIndex;
-    __strong NSMutableDictionary* _entries;
+    NSString* _identifier;
+    NSString* _repositoryDirectory;
+    NSString* _repositoryIndex;
+    NSMutableDictionary* _entries;
 }
 
 
