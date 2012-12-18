@@ -49,9 +49,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 - (id)initWithIdentifier:(NSString*)identifier andItemDuration:(NSTimeInterval)itemDuration
 {
     self = [super initWithIdentifier:identifier];
-    if (self != nil) {
-        _itemDuration = itemDuration;
-    }
+    if (self != nil) _itemDuration = itemDuration;
 
     return self;
 }
@@ -62,9 +60,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 - (id)itemForKey:(NSString*)key
 {
     id<BBCacheItem> item = [super itemForKey:key];
-    if (item == nil) {
-        return nil;
-    }
+    if (item == nil) return nil;
 
     NSDate* newExpiration = [NSDate dateWithTimeIntervalSinceNow:_itemDuration];
     [item setExpirationDate:newExpiration];
@@ -76,9 +72,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 
 - (BOOL)addItem:(id<BBCacheItem>)item
 {
-    if (item == nil) {
-        return NO;
-    }
+    if (item == nil) return NO;
 
     // Only change the expiration date if its nil
     // Allows users to set custom expiration date (only valid until item is touched by itemForKey:)
