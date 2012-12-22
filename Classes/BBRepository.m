@@ -100,9 +100,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
           createDirectoryAtPath:_repositoryDirectory withIntermediateDirectories:YES attributes:nil error:&error]) {
         LogError(@"[%@] Failed to ensure repository directory exists: %@",
                  [self repositoryName], [error localizedDescription]);
-        if (_entries == nil) {
-            _entries = [NSMutableDictionary dictionary];
-        }
+        if (_entries == nil) _entries = [NSMutableDictionary dictionary];
         return NO;
     }
 
