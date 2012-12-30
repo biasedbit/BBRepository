@@ -397,4 +397,74 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  */
 - (NSDictionary*)convertItemToDictionary:(id<BBRepositoryItem>)item;
 
+
+#pragma mark Hooks
+
+///------------
+/// @name Hooks
+///------------
+
+/**
+ Called right before adding a **new** item to the repository index.
+ 
+ Override this method to implement your custom logic (e.g. write a file to disk).
+ 
+ If you return `NO` on this method, the addition will be interrupted.
+ 
+ @param item The item to add.
+
+ @return NO to interrupt addition, YES to proceed.
+
+ @see willReplaceItem:withNewItem:
+ */
+- (BOOL)willAddNewItem:(id<BBRepositoryItem>)item;
+
+/**
+ Called right after adding a new item to the repository index.
+ 
+ @param item The item that was just added.
+
+ @see didReplaceItem:withNewItem:
+ */
+- (void)didAddNewItem:(id<BBRepositoryItem>)item;
+
+/**
+ Called right before replacing an item with a new item.
+
+ If your managed objects contain references to files on disk, you can use `item` and `newItem` to compare the paths
+ and, in case they're different, delete the old item.
+
+ If you return `NO` on this method, the replacement will be interrupted.
+
+ @param item The item that will be replaced.
+ @param newItem The new item.
+
+ @return NO to interrupt addition, YES to proceed.
+ */
+- (BOOL)willReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem;
+
+/**
+ Called right after replacing an item.
+ 
+ @param item The item that was replaced.
+ @param newItem The new item.
+ */
+- (void)didReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem;
+
+/**
+ Called right before removing an item from the repository index.
+ 
+ Unlike adding or replacing, removing cannot be stopped.
+
+ @param item The item that will be removed.
+ */
+- (void)willRemoveItem:(id<BBRepositoryItem>)item;
+
+/**
+ Called right after removing an item from the repository index.
+
+ @param item The item that was just removed.
+ */
+- (void)didRemoveItem:(id<BBRepositoryItem>)item;
+
 @end

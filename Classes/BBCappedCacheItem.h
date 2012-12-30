@@ -19,16 +19,15 @@
 //  Copyright (c) 2012 BiasedBit. All rights reserved.
 //
 
-#import "BBRepositoryItem.h"
+#import "BBCacheItem.h"
 
 
 
 #pragma mark -
 
-@protocol BBCacheItem <BBRepositoryItem>
+@protocol BBCappedCacheItem <BBCacheItem>
 
 @required
-- (NSDate*)expirationDate;
-- (void)setExpirationDate:(NSDate*)date;
+- (double)resourceUsage;
 
 @end

@@ -119,6 +119,8 @@ extern NSTimeInterval const kBBCacheDefaultItemDuration;
 - (BOOL)addItem:(id<BBCacheItem>)item;
 
 
+#pragma mark Item expiration
+
 ///----------------------
 /// @name Item expiration
 ///----------------------
@@ -131,21 +133,8 @@ extern NSTimeInterval const kBBCacheDefaultItemDuration;
  
  @return Number of purged items.
  
- @see destroyExpiredItem:
+ @see itemDeletedByCompaction:
  */
-- (NSUInteger)purgeStaleItems;
-
-/**
- Perform additional steps to destroy an item detected as stale.
-
- Subclass this method if you wish to perform additional steps when expiring an item (no need to call `super` as this
- is a no-op implementation).
- 
- As an example, if you were implementing an image cache, this method is where you would delete the file where the image
- was stored.
- 
- @param item The expired item to destroy.
- */
-- (void)destroyExpiredItem:(id<BBCacheItem>)item;
+- (NSUInteger)compact;
 
 @end

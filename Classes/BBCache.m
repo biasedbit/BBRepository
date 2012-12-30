@@ -62,10 +62,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
     id<BBCacheItem> item = [super itemForKey:key];
     if (item == nil) return nil;
 
-    NSDate* newExpiration = [NSDate dateWithTimeIntervalSinceNow:_itemDuration];
-    [item setExpirationDate:newExpiration];
-    LogTrace(@"[%@] Extended expiration date for item with key '%@' to %@",
-             [self repositoryName], key, newExpiration);
+    [self touchItem:item];
 
     return item;
 }
@@ -74,12 +71,8 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 {
     if (item == nil) return NO;
 
-    // Only change the expiration date if its nil
-    // Allows users to set custom expiration date (only valid until item is touched by itemForKey:)
-    if ([item expirationDate] == nil) {
-        NSDate* newExpiration = [NSDate dateWithTimeIntervalSinceNow:_itemDuration];
-        [item setExpirationDate:newExpiration];
-    }
+    // Only change the expiration date if it's not nil; allows us to set custom expiration date
+    if ([item expirationDate] == nil) [self touchItem:item];
 
     return [super addItem:item];
 }
@@ -92,7 +85,7 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 
 #pragma mark Interface
 
-- (NSUInteger)purgeStaleItems
+- (NSUInteger)compact
 {
     NSDate* now = [NSDate date];
 
@@ -105,21 +98,26 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
         NSDate* itemExpirationDate = [item expirationDate];
         if ([[now earlierDate:itemExpirationDate] isEqualToDate:itemExpirationDate]) {
             expiredItemCount++;
-            LogTrace(@"[%@] - Destroyed expired item with key '%@'", [self repositoryName], key);
+            LogTrace(@"[%@] - Will remove expired item with key '%@'", [self repositoryName], key);
 
             [keysToRemove addObject:key];
-            [self destroyExpiredItem:item];
         }
     }];
 
-    [_entries removeObjectsForKeys:keysToRemove];
+    for (NSString* key in keysToRemove) {
+        [self removeItemWithKey:key];
+    }
 
     return expiredItemCount;
 }
 
-- (void)destroyExpiredItem:(id<BBCacheItem>)item
+
+#pragma mark Private helpers
+
+- (void)touchItem:(id<BBCacheItem>)item
 {
-    // add your custom destruction behavior here
+    NSDate* newExpiration = [NSDate dateWithTimeIntervalSinceNow:_itemDuration];
+    [item setExpirationDate:newExpiration];
 }
 
 @end

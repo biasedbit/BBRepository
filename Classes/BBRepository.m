@@ -48,10 +48,10 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
         NSString* basePath = [self baseStoragePath];
         NSString* repositoryName = [self repositoryName];
-        NSString* indexFileName = [NSString stringWithFormat:@"%@-Index.plist", repositoryName];
+        NSString* indexFilename = [NSString stringWithFormat:@"%@-Index.plist", repositoryName];
 
         _repositoryDirectory = [basePath stringByAppendingPathComponent:repositoryName];
-        _repositoryIndex = [_repositoryDirectory stringByAppendingPathComponent:indexFileName];
+        _repositoryIndex = [_repositoryDirectory stringByAppendingPathComponent:indexFilename];
     }
 
     return self;
@@ -212,14 +212,33 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (BOOL)addItem:(id<BBRepositoryItem>)item
 {
+    id<BBRepositoryItem> existing = [_entries objectForKey:[item key]];
+
+    if (existing != nil) {
+        if (![self willReplaceItem:existing withNewItem:item]) return NO;
+    } else {
+        if (![self willAddNewItem:item]) return NO;
+    }
+
     [_entries setObject:item forKey:[item key]];
+
+    if (existing != nil) {
+        [self didReplaceItem:existing withNewItem:item];
+    } else {
+        [self didAddNewItem:item];
+    }
 
     return YES;
 }
 
 - (void)removeItemWithKey:(NSString*)key
 {
+    id<BBRepositoryItem> item = [_entries objectForKey:key];
+    if (item == nil) return;
+
+    [self willRemoveItem:item];
     [_entries removeObjectForKey:key];
+    [self didRemoveItem:item];
 }
 
 
@@ -235,6 +254,39 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     if (![item respondsToSelector:@selector(convertToRepositoryDictionary)]) return nil;
 
     return [item convertToRepositoryDictionary];
+}
+
+
+#pragma mark Hooks
+
+- (BOOL)willAddNewItem:(id<BBRepositoryItem>)item
+{
+    return YES;
+}
+
+- (void)didAddNewItem:(id<BBRepositoryItem>)item
+{
+    // no-op
+}
+
+- (BOOL)willReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem
+{
+    return YES;
+}
+
+- (void)didReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem
+{
+    // no-op
+}
+
+- (void)willRemoveItem:(id<BBRepositoryItem>)item
+{
+    // no-op
+}
+
+- (void)didRemoveItem:(id<BBRepositoryItem>)item
+{
+    // no-op
 }
 
 @end
