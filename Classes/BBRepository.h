@@ -25,16 +25,12 @@
 
 #pragma mark - Macros
 
-#ifndef LogTrace
-    #if DEBUG
-        #define LogTrace(fmt, ...)  NSLog((@"TRACE: " fmt), ##__VA_ARGS__);
-    #elif
-        #define LogTrace(fmt, ...)
-    #endif
-#endif
-
 #ifndef LogDebug
-    #define LogDebug(fmt, ...)  NSLog((@"DEBUG: " fmt), ##__VA_ARGS__);
+    #if DEBUG
+        #define LogDebug(fmt, ...)  NSLog((@"DEBUG: " fmt), ##__VA_ARGS__);
+    #elif
+        #define LogDebug(fmt, ...)
+    #endif
 #endif
 #ifndef LogInfo
     #define LogInfo(fmt, ...)   NSLog((@" INFO: " fmt), ##__VA_ARGS__);

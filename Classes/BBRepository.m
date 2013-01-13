@@ -107,7 +107,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     // Load the file as NSData
     NSData* dictionaryData = [NSData dataWithContentsOfFile:_repositoryIndex];
     if (dictionaryData == nil) {
-        LogTrace(@"[%@] Could not read index file; creating empty repository.", [self repositoryName]);
+        LogDebug(@"[%@] Could not read index file; creating empty repository.", [self repositoryName]);
         if (_entries == nil) _entries = [NSMutableDictionary dictionary];
         return YES;
     }
