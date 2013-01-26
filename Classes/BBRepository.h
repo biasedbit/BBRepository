@@ -277,6 +277,11 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  */
 - (BOOL)flush;
 
+- (void)flushInBackground;
+- (void)flushInBackground:(BOOL)immediately;
+
+@property(assign, nonatomic) NSTimeInterval backgroundFlushLeeway;
+
 
 #pragma mark Querying
 

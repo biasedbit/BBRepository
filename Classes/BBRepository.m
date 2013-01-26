@@ -45,6 +45,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     self = [super init];
     if (self != nil) {
         _identifier = identifier;
+        _backgroundFlushLeeway = 10;
 
         NSString* basePath = [self baseStoragePath];
         NSString* repositoryName = [self repositoryName];
@@ -151,6 +152,8 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (BOOL)flush
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
+
     // Grab a snapshot to avoid the need for synchronization
     NSDictionary* snapshot = [NSDictionary dictionaryWithDictionary:_entries];
 
@@ -184,6 +187,21 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return YES;
 }
 
+- (void)flushInBackground
+{
+    [self flushInBackground:NO];
+}
+
+- (void)flushInBackground:(BOOL)immediately
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
+    if (immediately) {
+        [self backgroundFlush];
+    } else {
+        [self performSelector:@selector(backgroundFlush) withObject:nil afterDelay:_backgroundFlushLeeway];
+    }
+}
+
 
 #pragma mark Querying
 
@@ -199,12 +217,17 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (BOOL)hasItemWithKey:(NSString*)key
 {
-    return [_entries objectForKey:key] != nil;
+    return _entries[key] != nil;
 }
 
 - (id)itemForKey:(NSString*)key
 {
-    return [_entries objectForKey:key];
+    return _entries[key];
+}
+
+- (id)objectForKeyedSubscript:(NSString*)key
+{
+    return [self itemForKey:key];
 }
 
 
@@ -220,20 +243,17 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
         if (![self willAddNewItem:item]) return NO;
     }
 
-    [_entries setObject:item forKey:[item key]];
+    _entries[[item key]] = item;
 
-    if (existing != nil) {
-        [self didReplaceItem:existing withNewItem:item];
-    } else {
-        [self didAddNewItem:item];
-    }
+    if (existing != nil) [self didReplaceItem:existing withNewItem:item];
+    else [self didAddNewItem:item];
 
     return YES;
 }
 
 - (void)removeItemWithKey:(NSString*)key
 {
-    id<BBRepositoryItem> item = [_entries objectForKey:key];
+    id<BBRepositoryItem> item = _entries[key];
     if (item == nil) return;
 
     [self willRemoveItem:item];
@@ -287,6 +307,16 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 - (void)didRemoveItem:(id<BBRepositoryItem>)item
 {
     // no-op
+}
+
+
+#pragma mark Private helpers
+
+- (void)backgroundFlush
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [self flush];
+    });
 }
 
 @end
