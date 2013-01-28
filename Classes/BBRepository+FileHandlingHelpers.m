@@ -48,7 +48,7 @@
 
 - (void)deleteFileInBackground:(NSString*)fullPathToFile
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError* error = nil;
         if ([[NSFileManager defaultManager] removeItemAtPath:fullPathToFile error:&error]) {
             LogTrace(@"[%@] Deleted file at '%@'.", self.repositoryName, fullPathToFile);
