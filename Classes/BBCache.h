@@ -128,8 +128,7 @@ extern NSTimeInterval const kBBCacheDefaultItemDuration;
 /**
  Destroy all items in this cache whose `expirationDate` property is inferior to the moment when this method is called.
  
- Each expired item will be removed from the cache index and `destroyExpiredItem:` will be called, passing the expired
- item as parameter.
+ Each expired item will be removed with the method `removeItemWithKey:`.
  
  @return Number of purged items.
  

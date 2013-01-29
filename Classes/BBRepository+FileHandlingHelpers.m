@@ -43,7 +43,7 @@
 
 - (NSString*)convertRelativeToFullPath:(NSString*)relativePath
 {
-    return [[self baseStoragePath] stringByAppendingString:relativePath];
+    return [[self baseStoragePath] stringByAppendingPathComponent:relativePath];
 }
 
 - (void)deleteFileInBackground:(NSString*)fullPathToFile
