@@ -35,9 +35,9 @@
 /// @name Creation
 ///---------------
 
-- (id)initWithIdentifier:(NSString*)identifier andResourceUsageLimit:(double)resourceLimit;
-- (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceLimit
-         andItemDuration:(NSTimeInterval)itemDuration;
+- (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit;
+- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+      resourceUsageLimit:(double)resourceUsageLimit;
 
 
 #pragma mark Cache properties

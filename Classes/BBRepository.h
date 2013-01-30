@@ -27,16 +27,16 @@
 
 #ifndef LogDebug
     #if DEBUG
-        #define LogDebug(fmt, ...)  NSLog((@"DEBUG: " fmt), ##__VA_ARGS__);
+        #define LogDebug(fmt, ...)  NSLog((@"DEBUG | " fmt), ##__VA_ARGS__);
     #elif
         #define LogDebug(fmt, ...)
     #endif
 #endif
 #ifndef LogInfo
-    #define LogInfo(fmt, ...)   NSLog((@" INFO: " fmt), ##__VA_ARGS__);
+    #define LogInfo(fmt, ...)   NSLog((@" INFO | " fmt), ##__VA_ARGS__);
 #endif
 #ifndef LogError
-    #define LogError(fmt, ...)  NSLog((@"ERROR: " fmt), ##__VA_ARGS__);
+    #define LogError(fmt, ...)  NSLog((@"ERROR | " fmt), ##__VA_ARGS__);
 #endif
 
 

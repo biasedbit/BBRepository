@@ -32,17 +32,23 @@
 
 - (id)init
 {
-    NSAssert(NO, @"Please initialize with initWithIdentifier:andResourceUsageLimit:");
+    NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
     return nil;
 }
 
 - (id)initWithIdentifier:(NSString*)identifier
 {
-    NSAssert(NO, @"Please initialize with initWithIdentifier:andResourceUsageLimit:");
+    NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
     return nil;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier andResourceUsageLimit:(double)resourceUsageLimit
+- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+{
+    NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
+    return nil;
+}
+
+- (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit
 {
     self = [super initWithIdentifier:identifier];
     if (self != nil) {
@@ -52,10 +58,10 @@
     return self;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit
-         andItemDuration:(NSTimeInterval)itemDuration
+- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+      resourceUsageLimit:(double)resourceUsageLimit
 {
-    self = [super initWithIdentifier:identifier andItemDuration:itemDuration];
+    self = [super initWithIdentifier:identifier itemDuration:itemDuration];
     if (self != nil) {
         _resourceUsageLimit = resourceUsageLimit;
     }
