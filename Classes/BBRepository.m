@@ -45,7 +45,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     self = [super init];
     if (self != nil) {
         _identifier = identifier;
-        _backgroundFlushLeeway = 10;
+        _backgroundFlushLeeway = 1;
 
         NSString* basePath = [self baseStoragePath];
         NSString* repositoryName = [self repositoryName];
