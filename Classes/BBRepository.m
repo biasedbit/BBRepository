@@ -194,12 +194,16 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 - (void)flushInBackground:(BOOL)immediately
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
-    if (immediately) {
-        [self backgroundFlush];
-    } else {
-        [self performSelector:@selector(backgroundFlush) withObject:nil afterDelay:_backgroundFlushLeeway];
-    }
+    // Make sure we run on the main queue, which has a NSRunLoop and lets us do the delayed selector tricks.
+    // The backgroundFlush implementation runs the -flush call on a background thread, anyway.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
+        if (immediately) {
+            [self backgroundFlush];
+        } else {
+            [self performSelector:@selector(backgroundFlush) withObject:nil afterDelay:_backgroundFlushLeeway];
+        }
+    });
 }
 
 
