@@ -92,23 +92,15 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
     LogDebug(@"[%@] Purging stale items with expiry date < %@…", [self repositoryName], now);
 
     NSMutableArray* keysToRemove = [NSMutableArray array];
-    __block NSUInteger expiredItemCount = 0;
     [_entries enumerateKeysAndObjectsUsingBlock:^(NSString* key, id<BBCacheItem> item, BOOL* stop) {
         // If date is < to staleThreshold, then purge this item
         NSDate* itemExpirationDate = [item expirationDate];
-        if ([[now earlierDate:itemExpirationDate] isEqualToDate:itemExpirationDate]) {
-            expiredItemCount++;
-            LogDebug(@"[%@] - Will remove expired item with key '%@'", [self repositoryName], key);
-
-            [keysToRemove addObject:key];
-        }
+        if ([[now earlierDate:itemExpirationDate] isEqualToDate:itemExpirationDate]) [keysToRemove addObject:key];
     }];
 
-    for (NSString* key in keysToRemove) {
-        [self removeItemWithKey:key];
-    }
+    for (NSString* key in keysToRemove) [self removeItemWithKey:key];
 
-    return expiredItemCount;
+    return [keysToRemove count];
 }
 
 

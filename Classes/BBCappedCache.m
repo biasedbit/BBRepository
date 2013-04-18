@@ -48,7 +48,7 @@
     return nil;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit
+- (instancetype)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit
 {
     self = [super initWithIdentifier:identifier];
     if (self != nil) _resourceUsageLimit = resourceUsageLimit;
