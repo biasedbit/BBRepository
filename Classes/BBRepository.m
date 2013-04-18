@@ -40,7 +40,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 #pragma mark Creation
 
-- (id)initWithIdentifier:(NSString*)identifier
+- (instancetype)initWithIdentifier:(NSString*)identifier
 {
     self = [super init];
     if (self != nil) {
@@ -58,7 +58,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return self;
 }
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithIdentifier:kBBRepositoryDefaultIdentifier];
 }

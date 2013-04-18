@@ -30,19 +30,19 @@
 
 #pragma mark Creation
 
-- (id)init
+- (instancetype)init
 {
     NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
     return nil;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier
+- (instancetype)initWithIdentifier:(NSString*)identifier
 {
     NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
     return nil;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+- (instancetype)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
 {
     NSAssert(NO, @"Please initialize with initWithIdentifier:itemDuration:resourceUsageLimit:");
     return nil;
@@ -51,20 +51,16 @@
 - (id)initWithIdentifier:(NSString*)identifier resourceUsageLimit:(double)resourceUsageLimit
 {
     self = [super initWithIdentifier:identifier];
-    if (self != nil) {
-        _resourceUsageLimit = resourceUsageLimit;
-    }
+    if (self != nil) _resourceUsageLimit = resourceUsageLimit;
 
     return self;
 }
 
-- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
-      resourceUsageLimit:(double)resourceUsageLimit
+- (instancetype)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+                resourceUsageLimit:(double)resourceUsageLimit
 {
     self = [super initWithIdentifier:identifier itemDuration:itemDuration];
-    if (self != nil) {
-        _resourceUsageLimit = resourceUsageLimit;
-    }
+    if (self != nil) _resourceUsageLimit = resourceUsageLimit;
 
     return self;
 }

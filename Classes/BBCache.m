@@ -36,17 +36,17 @@ NSTimeInterval const kBBCacheDefaultItemDuration = 604800; // 1 week
 
 #pragma mark Creation
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithIdentifier:kBBRepositoryDefaultIdentifier itemDuration:kBBCacheDefaultItemDuration];
 }
 
-- (id)initWithIdentifier:(NSString*)identifier
+- (instancetype)initWithIdentifier:(NSString*)identifier
 {
     return [self initWithIdentifier:identifier itemDuration:kBBCacheDefaultItemDuration];
 }
 
-- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
+- (instancetype)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration
 {
     self = [super initWithIdentifier:identifier];
     if (self != nil) _itemDuration = itemDuration;

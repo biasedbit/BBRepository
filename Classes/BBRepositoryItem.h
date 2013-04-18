@@ -76,7 +76,7 @@
  @return A newly initialized instance of the class implementing this protocol.
  */
 @optional
-- (id)initWithRepositoryDictionary:(NSDictionary*)dictionary;
+- (instancetype)initWithRepositoryDictionary:(NSDictionary*)dictionary;
 
 /**
  Convert the instance of the class implementing this protocol to its `NSDictionary` representation.

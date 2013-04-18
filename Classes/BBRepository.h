@@ -175,7 +175,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  
  @see identifier
  */
-- (id)initWithIdentifier:(NSString*)identifier;
+- (instancetype)initWithIdentifier:(NSString*)identifier;
 
 /**
  Creates a new repository, passing "Default" as the identifier.
@@ -184,7 +184,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  
  @see initWithIdentifier:
  */
-- (id)init;
+- (instancetype)init;
 
 
 #pragma mark Repository properties

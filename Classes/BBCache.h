@@ -78,7 +78,7 @@ extern NSTimeInterval const kBBCacheDefaultItemDuration;
  @see [BBRepository identifier]
  @see itemDuration
  */
-- (id)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration;
+- (instancetype)initWithIdentifier:(NSString*)identifier itemDuration:(NSTimeInterval)itemDuration;
 
 
 #pragma mark Cache properties
