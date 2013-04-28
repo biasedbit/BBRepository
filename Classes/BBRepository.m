@@ -154,6 +154,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
 
+    [self willFlush];
     // Grab a snapshot to avoid the need for synchronization
     NSDictionary* snapshot = [NSDictionary dictionaryWithDictionary:_entries];
 
@@ -181,6 +182,7 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
         return NO;
     }
 
+    [self didFinishFlushing];
     LogDebug(@"[%@] Serialized %u entries to %u binary format and wrote to disk.",
              [self repositoryName], [snapshot count], [itemsAsDictionaries count]);
 
@@ -198,11 +200,8 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     // The backgroundFlush implementation runs the -flush call on a background thread, anyway.
     dispatch_async(dispatch_get_main_queue(), ^{
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(backgroundFlush) object:nil];
-        if (immediately) {
-            [self backgroundFlush];
-        } else {
-            [self performSelector:@selector(backgroundFlush) withObject:nil afterDelay:_backgroundFlushLeeway];
-        }
+        if (immediately) [self backgroundFlush];
+        else [self performSelector:@selector(backgroundFlush) withObject:nil afterDelay:_backgroundFlushLeeway];
     });
 }
 
@@ -255,14 +254,16 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
     return YES;
 }
 
-- (void)removeItemWithKey:(NSString*)key
+- (id)removeItemWithKey:(NSString*)key
 {
     id<BBRepositoryItem> item = _entries[key];
-    if (item == nil) return;
+    if (item == nil) return nil;
 
     [self willRemoveItem:item];
     [_entries removeObjectForKey:key];
     [self didRemoveItem:item];
+
+    return item;
 }
 
 
@@ -283,32 +284,42 @@ NSString* const kBBRepositoryDefaultIdentifier = @"Default";
 
 #pragma mark Hooks
 
-- (BOOL)willAddNewItem:(id<BBRepositoryItem>)item
+- (BOOL)willAddNewItem:(id)item
 {
     return YES;
 }
 
-- (void)didAddNewItem:(id<BBRepositoryItem>)item
+- (void)didAddNewItem:(id)item
 {
     // no-op
 }
 
-- (BOOL)willReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem
+- (BOOL)willReplaceItem:(id)item withNewItem:(id)newItem
 {
     return YES;
 }
 
-- (void)didReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem
+- (void)didReplaceItem:(id)item withNewItem:(id)newItem
 {
     // no-op
 }
 
-- (void)willRemoveItem:(id<BBRepositoryItem>)item
+- (void)willRemoveItem:(id)item
 {
     // no-op
 }
 
-- (void)didRemoveItem:(id<BBRepositoryItem>)item
+- (void)didRemoveItem:(id)item
+{
+    // no-op
+}
+
+- (void)willFlush
+{
+    // no-op
+}
+
+- (void)didFinishFlushing
 {
     // no-op
 }

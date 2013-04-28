@@ -48,6 +48,8 @@
 
 - (void)deleteFileInBackground:(NSString*)fullPathToFile
 {
+    if (fullPathToFile == nil) return;
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError* error = nil;
         if ([[NSFileManager defaultManager] removeItemAtPath:fullPathToFile error:&error]) {

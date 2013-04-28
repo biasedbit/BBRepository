@@ -347,8 +347,10 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  Subclasses should override this method and change its input type to help guarantee type safety.
 
  @param key Key for the item to remove from the repository.
+ 
+ @return The removed item, whose key matched the input argument, or `nil` if none found.
  */
-- (void)removeItemWithKey:(NSString*)key;
+- (id)removeItemWithKey:(NSString*)key;
 
 
 #pragma mark Item (de-)serialization
@@ -418,7 +420,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 
  @see willReplaceItem:withNewItem:
  */
-- (BOOL)willAddNewItem:(id<BBRepositoryItem>)item;
+- (BOOL)willAddNewItem:(id)item;
 
 /**
  Called right after adding a new item to the repository index.
@@ -427,7 +429,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 
  @see didReplaceItem:withNewItem:
  */
-- (void)didAddNewItem:(id<BBRepositoryItem>)item;
+- (void)didAddNewItem:(id)item;
 
 /**
  Called right before replacing an item with a new item.
@@ -442,7 +444,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 
  @return NO to interrupt addition, YES to proceed.
  */
-- (BOOL)willReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem;
+- (BOOL)willReplaceItem:(id)item withNewItem:(id)newItem;
 
 /**
  Called right after replacing an item.
@@ -450,7 +452,7 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
  @param item The item that was replaced.
  @param newItem The new item.
  */
-- (void)didReplaceItem:(id<BBRepositoryItem>)item withNewItem:(id<BBRepositoryItem>)newItem;
+- (void)didReplaceItem:(id)item withNewItem:(id)newItem;
 
 /**
  Called right before removing an item from the repository index.
@@ -459,13 +461,16 @@ extern NSString* const kBBRepositoryDefaultIdentifier;
 
  @param item The item that will be removed.
  */
-- (void)willRemoveItem:(id<BBRepositoryItem>)item;
+- (void)willRemoveItem:(id)item;
 
 /**
  Called right after removing an item from the repository index.
 
  @param item The item that was just removed.
  */
-- (void)didRemoveItem:(id<BBRepositoryItem>)item;
+- (void)didRemoveItem:(id)item;
+
+- (void)willFlush;
+- (void)didFinishFlushing;
 
 @end
